@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path,include
-from .views import IndexView,LoginView,LogoutView,SignupView,PasswordChangeView,DashboardView,FaviconView
+from .views import IndexView,LoginView,LogoutView,SignupView,PasswordChangeView,DashboardView,FaviconView,UploadView
 
 
 urlpatterns = [
@@ -8,6 +8,7 @@ urlpatterns = [
     path("login/",LoginView.as_view(),name="login"), # User can login here.
     path("logout/",LogoutView.as_view(),name="logout"), # User can login here.
     path("signup/",SignupView.as_view(),name="signup"), # User can signup here.
+    path("upload/",UploadView.as_view(),name="upload"), # User can upload image here.
     path("change_password/",PasswordChangeView.as_view(),name="change_password"), # User can change their password here.
     path("dashboard/",DashboardView.as_view(),name="dashboard"), # Main Dashboard here.
     path('favicon.ico', FaviconView),
