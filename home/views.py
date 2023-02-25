@@ -2,7 +2,9 @@ from django.shortcuts import render,redirect
 from django.views.generic.base import TemplateView,RedirectView
 from .forms import UserCreationForm,UserLoginForm,PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.contrib.auth import login,logout,authenticate,update_session_auth_hash
+from .models import Animal
 # Create your views here.
 FaviconView = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 
@@ -17,6 +19,20 @@ class LogoutView(RedirectView):
         logout(self.request)
         return super().get_redirect_url(*args, **kwargs)
 
+class UploadView(TemplateView):
+    template_name = "upload.html"
+
+    def post(self, request, *args, **kwargs):
+        image = request.FILES['image']
+        latitude = request.POST.get("latitude","")
+        longitude = request.POST.get("longitude","")
+        if image != "" and latitude != "" and longitude != "":
+            animal = Animal(image=image,latitude=latitude,longitude=longitude)
+            animal.save()
+        else:
+            return JsonResponse(data={"submitted":False})
+        return JsonResponse(data={"submitted":True})
+        
 
 class LoginView(TemplateView):
     template_name = "authentication/login.html"
