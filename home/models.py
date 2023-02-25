@@ -24,6 +24,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=255)
     phone = models.CharField(max_length=20)
     verification_file = models.FileField(upload_to=upload_v)
+    about = models.CharField(max_length=1023)
     is_verified = models.BooleanField(default=False)
     latitude = models.FloatField()
     longitude = models.FloatField()
