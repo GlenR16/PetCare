@@ -1,12 +1,14 @@
 from django.shortcuts import render,redirect
 from django.views.generic.base import TemplateView,RedirectView
-from .forms import UserCreationForm,UserLoginForm,PasswordChangeForm
+from .forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import JsonResponse,Http404
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,logout,authenticate,update_session_auth_hash
-from .models import Animal,Message
-
+from .models import Animal,Message,User
+from django.contrib.auth.hashers import make_password
 from .models import STATUS
+from django.shortcuts import get_object_or_404
 
 FaviconView = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 
@@ -52,45 +54,55 @@ class LoginView(TemplateView):
     template_name = "authentication/login.html"
 
     def post(self, request, *args, **kwargs):
-            form = UserLoginForm(data=request.POST)
-            if form.is_valid():
-                user = authenticate(request,email=request.POST.get("username",""),password=request.POST.get("password",""))
-                login(request,user)
-                return redirect("/dashboard")
-            else:
-                return self.render_to_response({"form":form})
+            email = request.POST.get("email","")
+            password = request.POST.get("password","")
+            if email != "" and password != "":
+                user = authenticate(request,email=email,password=password)
+                if user != None:
+                    login(request,user)
+                    return redirect("/dashboard")
+            return self.render_to_response({"error":True})
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect("/dashboard/")
         return super().get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["form"] = UserLoginForm()
-        return context
 
 class SignupView(TemplateView):
     template_name = "authentication/signup.html"
 
     def post(self, request, *args, **kwargs):
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
+        name = request.POST.get("name","")
+        email = request.POST.get("email","")
+        phone = request.POST.get("phone","")
+        about = request.POST.get("about","")
+        password1 = request.POST.get("password1","")
+        password2 = request.POST.get("password2","")
+        website = request.POST.get("website","")
+        address = request.POST.get("address","")
+        city = request.POST.get("city","")
+        state = request.POST.get("state","")
+        postalcode = request.POST.get("postalcode","")
+        activemembers = request.POST.get("activemembers","")
+        alerts = request.POST.get("alerts","")
+        country = request.POST.get("country","")
+        candidates = request.POST.get("candidates","")
+        verificationfile = request.FILES["verificationfile"]
+        if name != "" and verificationfile != "" and email != "" and phone != "" and about != "" and password1 != "" and password2 != "" and website != "" and address != "" and city != "" and state != "" and postalcode != "" and alerts != "" and country != "" and candidates != "" and password1 != "" and password1 == password2:
+            address = address +", "+ city +" "+ postalcode+", " + state +", "+ country
+            user = User(name=name,email=email,phone=phone,verification_file=verificationfile,about=about,active_members=activemembers,website=website,address=address)
+            user.set_password(password1)
+            user.save()
+            print("1->",user.__dict__)
             login(request,user)
             return redirect("/dashboard")
         else:
-            return self.render_to_response({"form":form})
+            return self.render_to_response({"error":True})
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect("/dashboard/")
         return super().get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["form"] = UserCreationForm()
-        return context
 
 class PasswordChangeView(TemplateView):
     template_name = "authentication/passwordchange.html"
@@ -115,6 +127,27 @@ class DashboardView(LoginRequiredMixin,TemplateView):
     login_url = '/login'
     redirect_field_name = 'redirect_to'
 
+    def post(self, request, *args, **kwargs):
+        ticket_id = request.POST.get("id","")
+        status = request.POST.get("status","")
+        if ticket_id != "" and status != "":
+            animal = get_object_or_404(Animal,pk=ticket_id)
+            if animal.status == "Pending":
+                request.user.tickets.add(animal)
+                return self.render_to_response({"alloted":True})
+        return self.render_to_response({"alloted":False})
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["tickets"] = self.request.user.tickets.all()
         return context
+
+@login_required(login_url='/login/')
+def APIView(request):
+    radius = 2000
+    offset = 360 * radius / 40075000
+    # This function does not work. Maths is wrong.
+    up = request.user.latitude - offset
+    down = request.user.latitude + offset
+    data = Animal.objects.filter(latitude__lte=up,latitude__gte=down)
+    return None

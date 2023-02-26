@@ -1,0 +1,10 @@
+{{request.user.email}}
+<br><hr>
+
+{% for i in tickets %}
+    {{i}} <br>
+    {{i.image}} <br>
+    {{i.latitude}} <br>
+    {{i.longitude}} <br>
+
+{% endfor %}

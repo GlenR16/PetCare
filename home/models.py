@@ -1,13 +1,12 @@
 from django.db import models
 import uuid
-# Create your models here.
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from .managers import UserManager
 from geopy.geocoders import Nominatim
+from django.contrib.auth import password_validation
+
 geolocator = Nominatim(user_agent="home")
-
-
 
 STATUS = {
     "PENDING":"Pending",
@@ -61,6 +60,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        loc = geolocator.geocode(self.address)
+        print(self.address)
+        print(loc)
+        self.latitude = loc.latitude
+        self.longitude = loc.longitude
+        super().save(*args, **kwargs)
+        if self._password is not None:
+            password_validation.password_changed(self._password, self)
+            self._password = None
+    
 
 class Donation(models.Model):
     user = models.CharField(max_length=127)
