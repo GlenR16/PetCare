@@ -10,7 +10,7 @@ urlpatterns = [
     path("signup/",SignupView.as_view(),name="signup"), # User can signup here.
     path("upload/",UploadView.as_view(),name="upload"), # User can upload image here.
     path("donate/",DonateView.as_view(),name="donate"), # User can donate money here.
-    path("change_password/",PasswordChangeView.as_view(),name="change_password"), # User can change their password here.
+    #path("change_password/",PasswordChangeView.as_view(),name="change_password"), # User can change their password here.
     path("dashboard/",DashboardView.as_view(),name="dashboard"), # Main Dashboard here.
     path('favicon.ico', FaviconView),
 ]

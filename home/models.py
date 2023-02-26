@@ -12,7 +12,8 @@ geolocator = Nominatim(user_agent="home")
 STATUS = {
     "PENDING":"Pending",
     "ALLOTTED":"Allotted",
-    "RESCUED":"Rescued"
+    "RESCUED":"Rescued",
+    "NOTRESCUED":"NotRescued"
     }
 
 PAY_STATUS = {
@@ -48,8 +49,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     longitude = models.FloatField()
     active_members = models.IntegerField()
     tickets = models.ManyToManyField(Animal,blank=True)
-    address = models.CharField(max_length=255)
+    address = models.CharField(max_length=511)
     website = models.CharField(max_length=255)
+
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now=True)

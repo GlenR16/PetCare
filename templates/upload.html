@@ -14,7 +14,7 @@
     <div class="flex items-center justify-center w-full">
       <label
         for="dropzone-file"
-        class="flex flex-col items-center justify-center w-full h-screen border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-neutral-800 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 m-[50px]"
+        class="flex flex-col items-center justify-center w-3/4 h-[500px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-neutral-800 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 m-[50px]"
       >
         <div class="flex flex-col items-center justify-center pt-5 pb-6">
           <svg
@@ -41,7 +41,6 @@
         </div>
         <input id="dropzone-file" type="file" class="hidden" />
         {% csrf_token %}
-        <button onclick="handleUpload()">Submit</button>
       </label>
     </div>
   </body>

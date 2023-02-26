@@ -20,12 +20,11 @@ class IndexView(TemplateView):
         if name != "" and email != "" and message != "":
             message = Message(name=name,email=email,message=message)
             message.save()
-        return self.render_to_response({"submitted":True})
+            return self.render_to_response({"submitted":True})
+        return self.render_to_response({"submitted":False})
 
 class DonateView(TemplateView):
     template_name = "donate.html"
-
-
 
 class LogoutView(RedirectView):
     permanent = True
@@ -49,7 +48,6 @@ class UploadView(TemplateView):
             return JsonResponse(data={"submitted":False})
         return JsonResponse(data={"submitted":True})
         
-
 class LoginView(TemplateView):
     template_name = "authentication/login.html"
 

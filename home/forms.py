@@ -6,7 +6,7 @@ from django.forms import Form
 class UserCreationForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = User
-        fields = ('email','name')
+        fields = ('email','name','phone','verification_file','about','active_members','address','website')
 
 #Only for admin page. Site uses api
 class AnimalCreationForm(Form):
