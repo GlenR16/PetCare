@@ -4,8 +4,22 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
 from .managers import UserManager
+from geopy.geocoders import Nominatim
+geolocator = Nominatim(user_agent="home")
 
-STATUS = {}
+
+
+STATUS = {
+    "PENDING":"Pending",
+    "ALLOTTED":"Allotted",
+    "RESCUED":"Rescued"
+    }
+
+PAY_STATUS = {
+    "PENDING":"Pending",
+    "SUCCESS":"Success",
+    "FAILURE":"Failure"
+}
 
 def upload_v(instance,filename):
     return "verification/"+str(uuid.uuid4())+"."+filename.split(".")[-1]
@@ -17,7 +31,11 @@ class Animal(models.Model):
     image = models.ImageField(upload_to=upload_i)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    status = models.CharField(max_length=63)
+    is_valid = models.BooleanField(default=True)
+    status = models.CharField(max_length=63,default=STATUS["PENDING"])
+    def __str__(self):
+        location = geolocator.reverse(str(self.latitude)+","+str(self.longitude))
+        return str(location)
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField("Email Address",unique=True,max_length=127)
@@ -38,6 +56,25 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ["name","phone","latitude","longitude","active_members","address","website"]
+
+    def __str__(self):
+        return self.name
+
+class Donation(models.Model):
+    user = models.CharField(max_length=127)
+    message = models.CharField(max_length=511,blank=True,null=True)
+    status = models.CharField(max_length=31,default=PAY_STATUS["PENDING"])
+    payment_id = models.CharField(max_length=255)
+    amount = models.FloatField()
+    signature = models.CharField(max_length=255)
+
+    def __str__(self):
+        return str(self.user)+" ("+str(self.amount)+")"
+
+class Message(models.Model):
+    name = models.CharField(max_length=127)
+    email = models.EmailField(max_length=254)
+    message = models.TextField()
 
     def __str__(self):
         return self.name

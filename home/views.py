@@ -4,12 +4,28 @@ from .forms import UserCreationForm,UserLoginForm,PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.contrib.auth import login,logout,authenticate,update_session_auth_hash
-from .models import Animal
-# Create your views here.
+from .models import Animal,Message
+
+from .models import STATUS
+
 FaviconView = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 
 class IndexView(TemplateView):
     template_name = "index.html"
+
+    def post(self, request, *args, **kwargs):
+        name = request.POST.get("name","")
+        email = request.POST.get("email","")
+        message = request.POST.get("message","")
+        if name != "" and email != "" and message != "":
+            message = Message(name=name,email=email,message=message)
+            message.save()
+        return self.render_to_response({"submitted":True})
+
+class DonateView(TemplateView):
+    template_name = "donate.html"
+
+
 
 class LogoutView(RedirectView):
     permanent = True
