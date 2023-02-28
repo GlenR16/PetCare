@@ -21,6 +21,7 @@ PAY_STATUS = {
     "FAILURE":"Failure"
 }
 
+
 def upload_v(instance,filename):
     return "verification/"+str(uuid.uuid4())+"."+filename.split(".")[-1]
 
@@ -31,11 +32,17 @@ class Animal(models.Model):
     image = models.ImageField(upload_to=upload_i)
     latitude = models.FloatField()
     longitude = models.FloatField()
+    address = models.CharField(max_length=255)
     is_valid = models.BooleanField(default=True)
     status = models.CharField(max_length=63,default=STATUS["PENDING"])
+
+    def save(self, *args, **kwargs):
+        if self.address == "":
+            self.address = str(geolocator.reverse(str(self.latitude)+","+str(self.longitude)))
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        location = geolocator.reverse(str(self.latitude)+","+str(self.longitude))
-        return str(location)
+        return self.address
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField("Email Address",unique=True,max_length=127)
@@ -62,15 +69,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.name
 
     def save(self, *args, **kwargs):
-        loc = geolocator.geocode(self.address)
-        print(self.address)
-        print(loc)
-        self.latitude = loc.latitude
-        self.longitude = loc.longitude
+        if self.latitude == None or self.longitude == None:
+            loc = geolocator.geocode(self.address)
+            self.latitude = loc.latitude
+            self.longitude = loc.longitude
         super().save(*args, **kwargs)
-        if self._password is not None:
-            password_validation.password_changed(self._password, self)
-            self._password = None
     
 
 class Donation(models.Model):

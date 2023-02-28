@@ -30,7 +30,7 @@ class UserAdmin(UserAdmin):
 class AnimalAdmin(admin.ModelAdmin):
     add_form = AnimalCreationForm
     model = Animal
-    list_display = ("__str__", 'status',)
+    list_display = ("address", 'status',)
     list_filter = ('status','is_valid')
 
 @register(Donation)
