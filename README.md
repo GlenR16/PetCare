@@ -9,5 +9,7 @@ To run the application in CMD :
 
 - go to the diectory
 
+- install dependencies using : pip install requirements.txt
+
 - type python manage.py runserver
 
