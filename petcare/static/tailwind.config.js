@@ -3,12 +3,10 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'dmserif': ['DM Serif', 'serif'],
-        'com': ['Comfortaa', 'cursive'],
-      }
+        dmserif: ["DM Serif", "serif"],
+        com: ["Comfortaa", "cursive"],
+      },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
-}
+  plugins: [require("@tailwindcss/forms")],
+};
