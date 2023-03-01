@@ -6,11 +6,14 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,logout,authenticate,update_session_auth_hash
 from .models import Animal,Message,User
-from django.contrib.auth.hashers import make_password
 from .models import STATUS
 from django.shortcuts import get_object_or_404
+from django.core.mail import EmailMessage
 from .serializers import AnimalSerializer
-SEARCH_RADIUS = 5000
+from django.template import Context
+from django.template.loader import get_template
+from django.db.models import Sum
+SEARCH_RADIUS = 5000 # in KM
 
 FaviconView = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 
@@ -26,13 +29,19 @@ class IndexView(TemplateView):
             message.save()
             return self.render_to_response({"submitted":True})
         return self.render_to_response({"submitted":False})
-
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        stats = [Animal.objects.filter(status=STATUS["RESCUED"]).count(),User.objects.aggregate(Sum('active_members')).get("active_members__sum",0),User.objects.all().count(),3]
+        context["stats"] = stats
+        return context
+    
 class DonateView(TemplateView):
     template_name = "donate.html"
 
 class LogoutView(RedirectView):
     permanent = True
-    pattern_name = 'login'
+    pattern_name = 'home:login'
 
     def get_redirect_url(self, *args, **kwargs):
         logout(self.request)
@@ -105,16 +114,19 @@ class SignupView(TemplateView):
             return redirect("/dashboard/")
         return super().get(request, *args, **kwargs)
 
-class PasswordChangeView(TemplateView):
+class PasswordChangeView(LoginRequiredMixin,TemplateView):
     template_name = "authentication/passwordchange.html"
-
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
+    
     def post(self, request, *args, **kwargs):
-        form = PasswordChangeForm(request.POST)
+        form = PasswordChangeForm(user=request.user,data=request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request,user)
             return render(request,"authentication/passworddone.html")
         else:
+            print("invalid")
             return self.render_to_response({"form":form})
 
     def get_context_data(self, **kwargs):
@@ -163,3 +175,27 @@ def APIView(request):
         return JsonResponse(data={"submitted":True})
     data = AnimalSerializer(valid,many=True)
     return JsonResponse(data=data.data,safe=False)
+
+def send_email(animal):
+    """
+    Send email to NGO with animal details.
+    """
+    message = get_template("email.html").render(Context({
+        'animal': animal
+    }))
+    offset_lat = 360 * SEARCH_RADIUS / 40075016.686
+    offset_long = 360 * SEARCH_RADIUS / 40075017
+    up = animal.latitude + offset_lat
+    down = animal.latitude - offset_lat
+    left = animal.longitude - offset_long
+    right = animal.longitude + offset_long
+    valid = [ a.email for a in User.objects.filter(latitude__lte=up,latitude__gte=down,longitude__lte=right,longitude__gte=left) ]
+    mail = EmailMessage(
+        subject="Injured Animal reported near you.",
+        body=message,
+        from_email="emergency@pawsforacause.com",
+        to=valid,
+        reply_to=["emergency@pawsforacause.com"],
+    )
+    mail.content_subtype = "html"
+    return mail.send()

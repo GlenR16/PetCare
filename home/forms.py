@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm,AuthenticationForm,PasswordChangeForm
 from .models import User,Animal
-from django.forms import Form
+from django import forms
 
 # Signup Form. Visible at /signup
 class UserCreationForm(UserCreationForm):
@@ -9,7 +9,7 @@ class UserCreationForm(UserCreationForm):
         fields = ('email','name','phone','verification_file','about','active_members','address','website')
 
 #Only for admin page. Site uses api
-class AnimalCreationForm(Form):
+class AnimalCreationForm(forms.Form):
     class Meta:
         model = Animal
         fields = ('image',"latitude","longitude","status")
@@ -28,5 +28,9 @@ class UserLoginForm(AuthenticationForm):
 
 # Change user password with old password.
 class PasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(label="",widget=forms.PasswordInput(attrs={'placeholder': 'Old Password'}))
+    new_password1 = forms.CharField(label="",widget=forms.PasswordInput(attrs={'placeholder': 'New Password'}))
+    new_password2 = forms.CharField(label="",widget=forms.PasswordInput(attrs={'placeholder': 'New Password Confirmation'}))
+    
     class Meta:
         model = User
