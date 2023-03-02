@@ -5,3 +5,11 @@ menuToggle.addEventListener("click", () => {
     navDropdown.classList.replace("hidden", "block");
   else navDropdown.classList.add("block", "hidden");
 });
+
+msg_sent_toast = document.getElementById("msg-sent");
+if (msg_sent_toast){
+  setTimeout(function () {
+    msg_sent_toast.classList.add("hidden");
+  }, 6000);
+}
+
