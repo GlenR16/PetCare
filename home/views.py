@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.views.generic.base import TemplateView,RedirectView
-from .forms import PasswordChangeForm
+from .forms import PasswordChangeForm,UserLoginForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -57,6 +57,8 @@ class UploadView(TemplateView):
         if image != "" and latitude != "" and longitude != "":
             animal = Animal(image=image,latitude=latitude,longitude=longitude)
             animal.save()
+            # Email Settings not done yet. Keep this comented until email fixed in settings.py file.
+            # send_email(animal)
         else:
             return JsonResponse(data={"submitted":False})
         return JsonResponse(data={"submitted":True})
@@ -65,19 +67,23 @@ class LoginView(TemplateView):
     template_name = "authentication/login.html"
 
     def post(self, request, *args, **kwargs):
-            email = request.POST.get("email","")
-            password = request.POST.get("password","")
-            if email != "" and password != "":
-                user = authenticate(request,email=email,password=password)
-                if user != None:
-                    login(request,user)
-                    return redirect("/dashboard")
-            return self.render_to_response({"error":True})
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            user = authenticate(request,email=request.POST.get("username",""),password=request.POST.get("password",""))
+            if user is not None:
+                login(request,user)
+                return redirect("/dashboard/")
+        return self.render_to_response({"form":form})
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect("/dashboard/")
         return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = UserLoginForm(self.request.user)
+        return context
 
 class SignupView(TemplateView):
     template_name = "authentication/signup.html"
@@ -97,11 +103,11 @@ class SignupView(TemplateView):
         activemembers = request.POST.get("activemembers","")
         alerts = request.POST.get("alerts","")
         country = request.POST.get("country","")
-        candidates = request.POST.get("candidates","")
-        verificationfile = request.FILES["verificationfile"]
-        if name != "" and verificationfile != "" and email != "" and phone != "" and about != "" and password1 != "" and password2 != "" and website != "" and address != "" and city != "" and state != "" and postalcode != "" and alerts != "" and country != "" and candidates != "" and password1 != "" and password1 == password2:
+        newsletter = request.POST.get("newsletter","")
+        verificationfile = request.FILES.get("verificationfile","")
+        if name != "" and verificationfile != "" and email != "" and phone != "" and about != "" and password1 != "" and password2 != "" and website != "" and address != "" and city != "" and state != "" and postalcode != "" and alerts != "" and country != "" and newsletter != "" and password1 != "" and password1 == password2:
             address = address +", "+ city +" "+ postalcode+", " + state +", "+ country
-            user = User(name=name,email=email,phone=phone,verification_file=verificationfile,about=about,active_members=activemembers,website=website,address=address)
+            user = User(name=name,email=email,phone=phone,verification_file=verificationfile,about=about,active_members=activemembers,website=website,address=address,alerts=alerts,newsletters=newsletter)
             user.set_password(password1)
             user.save()
             login(request,user)
@@ -126,7 +132,6 @@ class PasswordChangeView(LoginRequiredMixin,TemplateView):
             update_session_auth_hash(request,user)
             return render(request,"authentication/passworddone.html")
         else:
-            print("invalid")
             return self.render_to_response({"form":form})
 
     def get_context_data(self, **kwargs):
@@ -189,7 +194,7 @@ def send_email(animal):
     down = animal.latitude - offset_lat
     left = animal.longitude - offset_long
     right = animal.longitude + offset_long
-    valid = [ a.email for a in User.objects.filter(latitude__lte=up,latitude__gte=down,longitude__lte=right,longitude__gte=left) ]
+    valid = [ a.email  for a in User.objects.filter(latitude__lte=up,latitude__gte=down,longitude__lte=right,longitude__gte=left) if a.alerts ]
     mail = EmailMessage(
         subject="Injured Animal reported near you.",
         body=message,
