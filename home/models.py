@@ -57,7 +57,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     tickets = models.ManyToManyField(Animal,blank=True)
     address = models.CharField(max_length=511)
     website = models.CharField(max_length=255)
-
+    alerts = models.BooleanField(default=False)
+    newsletters = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now=True)

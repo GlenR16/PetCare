@@ -1,84 +1,9 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{% static 'dist/output.css' %}">
-    <title>Signup</title>
-</head>
-<body class="">
-  <nav
-  class="flex items-center justify-between flex-wrap p-4 mt-0 w-full z-10 top-0 md:bg-neutral-800 bg-neutral-900"
->
-  <div class="flex items-center flex-shrink-0 text-white mr-6">
-    <div class="h-8 w-14 mr-2">
-      <svg
-        version="1.1"
-        id="Layer_1"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        x="0px"
-        y="0px"
-        viewBox="-10 -10 200 200"
-      >
-        <g>
-          <path
-            fill="rgb(248 113 113)"
-            d="M40.06,0.37c9.4,0,17.03,11.69,17.03,26.1s-7.63,26.1-17.03,26.1c-9.4,0-17.03-11.68-17.03-26.1 C23.04,12.06,30.66,0.37,40.06,0.37L40.06,0.37z M61.71,63.55c19.94,0.04,22.42,13.25,39.23,35.86 c8.38,16.45-2.5,26.82-21.15,22.38c-8.46-4.31-14.41-5.83-20.38-5.63c-10.34,0.36-12.95,7.18-24.98,6.7 c-9.28-0.25-13.46-4.14-14.27-10.07c-0.87-6.3,1.56-10.28,4.52-15.49C36.18,77.02,48.07,61.01,61.71,63.55L61.71,63.55L61.71,63.55 z M7.17,39.08C0.14,41.86-2.1,52.85,2.16,63.62C6.42,74.39,15.57,80.87,22.6,78.09c7.03-2.78,9.27-13.77,5.01-24.54 C23.35,42.78,14.2,36.3,7.17,39.08L7.17,39.08z M112.55,39.08c7.03,2.78,9.27,13.77,5.01,24.54 c-4.26,10.77-13.42,17.25-20.44,14.47c-7.03-2.78-9.27-13.77-5.01-24.54C96.37,42.78,105.52,36.3,112.55,39.08L112.55,39.08z M79.35,0c9.4,0,17.03,11.69,17.03,26.1s-7.63,26.1-17.03,26.1c-9.4,0-17.03-11.68-17.03-26.1C62.33,11.69,69.95,0,79.35,0L79.35,0 z"
-          />
-        </g>
-      </svg>
-    </div>
-
-    <span class="font-semibold text-xl tracking-tight"
-      >Paws for a Cause</span
-    >
-  </div>
-  <div class="block lg:hidden">
-    <button
-      id="nav-toggle"
-      class="flex items-center px-3 py-2 border rounded text-red-200 border-red-400 hover:text-white hover:border-white"
-    >
-      <svg
-        class="fill-current h-4 w-4"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-      </svg>
-    </button>
-  </div>
-  <div
-    id="menu"
-    class="w-full block flex-grow lg:flex lg:items-center lg:w-auto"
-  >
-    <div class="text-sm lg:flex-grow">
-      <a
-        href="/donate"
-        class="block mt-4 lg:inline-block lg:mt-0 text-red-200 hover:text-white mr-4"
-      >
-        Donate
-      </a>
-      <a
-        href="/signup"
-        class="block mt-4 lg:inline-block lg:mt-0 text-red-200 hover:text-white mr-4"
-      >
-        Join as an NGO
-      </a>
-      <a
-        href="/upload"
-        class="block mt-4 lg:inline-block lg:mt-0 text-red-200 hover:text-white"
-      >
-        Upload Rescue Image
-      </a>
-    </div>
-  </div>
-</nav>
+{% block title %}Signup{% endblock title %}
+{% block content %}
 <div class="m-[20px]">
-<div class="border-4 rounded border-red-300 bg-neutral-800">
+<div class="rounded bg-neutral-800">
     <div class="md:grid md:grid-cols-3 md:gap-6 m-[15px]">
       <div class="md:col-span-1">
         <div class="px-4 sm:px-0">
@@ -93,16 +18,16 @@
             <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
               <div class="col-span-6 sm:col-span-3">
                 <label for="first-name" class="block text-sm font-medium text-gray-700">Name</label>
-                <input type="text" name="name" id="first-name" autocomplete="given-name" class="mt-1 p-2 border-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                <input type="text" maxlength="255" name="name" id="first-name" autocomplete="given-name" class="mt-1 p-2 border-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
               </div>
 
               <div class="col-span-6 sm:col-span-4">
                 <label for="email-address" class="block text-sm font-medium text-gray-700">Email address</label>
-                <input type="text" name="email" id="email-address" autocomplete="email" class="mt-1 p-2 border-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                <input type="text" maxlength="127"  name="email" id="email-address" autocomplete="email" class="mt-1 p-2 border-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
               </div>
               <div class="mb-4 md:flex md:justify-evenly">
                 <div class="w-1/2 pr-2">
-                    <label class="block mb-2 text-sm font-bold text-gray-700" for="password">
+                    <label class="block mb-2 text-sm  text-gray-700" for="password">
                         Password
                     </label>
                     <input
@@ -113,7 +38,7 @@
                     />
                 </div>
                 <div class="w-1/2 pl-2">
-                    <label class="block mb-2 text-sm font-bold text-gray-700" for="c_password">
+                    <label class="block mb-2 text-sm  text-gray-700" for="c_password">
                         Confirm Password
                     </label>
                     <input
@@ -126,14 +51,14 @@
             </div>
               <div class="col-span-6 sm:col-span-4">
                 <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                <input type="text" name="phone" id="phone" autocomplete="phone" class=" mt-1 p-2 border-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                <input type="text" name="phone" maxlength="20" id="phone" autocomplete="phone" class=" mt-1 p-2 border-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
               </div>
               <div class="mb-4 md:flex md:justify-evenly">
                 <div class="col-span-3 sm:col-span-2 w-1/2 pr-2">
                   <label for="company-website" class="block text-sm font-medium text-gray-700">Website of the NGO</label>
                   <div class="mt-1 flex rounded-md shadow-sm">
                     <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">https://</span>
-                    <input type="text" name="website" id="company-website" class="block p-2 border-2 w-full flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="www.example.com" required>
+                    <input type="text" maxlength="255" name="website" id="company-website" class="block p-2 border-2 w-full flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="www.example.com" required>
                   </div>
                 </div>
                 <div class="col-span-3 sm:col-span-2 w-1/2 pl-2">
@@ -161,31 +86,31 @@
               <div>
                 <label for="about" class="block text-sm font-medium text-gray-700">About</label>
                 <div class="mt-1">
-                  <input type="text" id="about" name="about" rows="3" class="mt-1 block p-2 border-2 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Something about your NGO.">
+                  <input type="text" maxlength="1023" id="about" name="about" rows="3" class="mt-1 block p-2 border-2 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Something about your NGO.">
                 </div>
                 <p class="mt-2 text-sm text-gray-500">Brief description about the aims and working of your oganization</p>
               </div>
 
               <div class="col-span-6 sm:col-span-3">
                 <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
-                <select id="country" name="country" autocomplete="country-name" class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" required>
+                <select id="country" maxlength="127" name="country" autocomplete="country-name" class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" required>
                   <option>India</option>
                 </select>
               </div>
               <div class="grid grid-cols-6 gap-6">
                 <div class="col-span-6">
                   <label for="street-address" class="block text-sm font-medium text-gray-700">Station Address</label>
-                  <input type="text" name="address" id="street-address" autocomplete="street-address" class="mt-1 p-2 border-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                  <input type="text" maxlength="127" name="address" id="street-address" autocomplete="street-address" class="mt-1 p-2 border-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                 </div>
   
                 <div class="col-span-6 sm:col-span-6 lg:col-span-2">
                   <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-                  <input type="text" name="city" id="city" autocomplete="address-level2" class="mt-1 block w-full  p-2 border-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                  <input type="text" maxlength="127" name="city" id="city" autocomplete="address-level2" class="mt-1 block w-full  p-2 border-2  rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                 </div>
   
                 <div class="col-span-6 sm:col-span-3 lg:col-span-2">
                   <label for="region" class="block text-sm font-medium text-gray-700">State / Province</label>
-                  <input type="text" name="state" id="region" autocomplete="address-level1" class="mt-1  p-2 border-2  block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
+                  <input type="text" maxlength="127" name="state" id="region" autocomplete="address-level1" class="mt-1  p-2 border-2  block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                 </div>
   
                 <div class="col-span-6 sm:col-span-3 lg:col-span-2">
@@ -197,19 +122,19 @@
                 <div class="mb-4 md:flex md:justify-evenly">
                   <div class="flex items-start w-1/2">
                     <div class="flex h-5 items-center">
-                      <input id="comments" name="alerts" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                      <input id="alerts" name="alerts" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                     </div>
                     <div class="ml-3 text-sm">
-                      <label for="comments" class="font-medium text-gray-700">Alerts</label>
+                      <label for="alerts" class="font-medium text-gray-700">Alerts</label>
                       <p class="text-gray-500">Get notified about the location of the injured animals.</p>
                     </div>
                   </div>
                   <div class="flex items-start w-1/2">
                     <div class="flex h-5 items-center">
-                      <input id="candidates" name="candidates" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                      <input id="newsletter" name="newsletter" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                     </div>
                     <div class="ml-3 text-sm">
-                      <label for="candidates" class="font-medium text-gray-700">Newsletters</label>
+                      <label for="newsletter" class="font-medium text-gray-700">Newsletters</label>
                       <p class="text-gray-500">Get notified when we release a monthly newsletter.</p>
                     </div>
                   </div>
@@ -225,113 +150,4 @@
     </div>
   </div>
 </div>
-<footer class="text-gray-600 body-font bg-neutral-800">
-  <div
-    class="container px-1 py-1 mx-auto flex items-center sm:flex-row flex-col"
-  >
-    <a
-      class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900"
-    >
-      <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-red-400 rounded-full" viewBox="0 0 24 24">
-      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-    </svg>
-    <span class="ml-3 text-xl">Tailblocks</span> -->
-    <svg
-      version="1.1"
-      id="Layer_1"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      x="0px"
-      y="0px"
-      height="48px"
-      width="48px"
-      viewBox="-20 -60 250 250"
-    >
-      <g>
-        <path
-          fill="rgb(248 113 113)"
-          d="M40.06,0.37c9.4,0,17.03,11.69,17.03,26.1s-7.63,26.1-17.03,26.1c-9.4,0-17.03-11.68-17.03-26.1 C23.04,12.06,30.66,0.37,40.06,0.37L40.06,0.37z M61.71,63.55c19.94,0.04,22.42,13.25,39.23,35.86 c8.38,16.45-2.5,26.82-21.15,22.38c-8.46-4.31-14.41-5.83-20.38-5.63c-10.34,0.36-12.95,7.18-24.98,6.7 c-9.28-0.25-13.46-4.14-14.27-10.07c-0.87-6.3,1.56-10.28,4.52-15.49C36.18,77.02,48.07,61.01,61.71,63.55L61.71,63.55L61.71,63.55 z M7.17,39.08C0.14,41.86-2.1,52.85,2.16,63.62C6.42,74.39,15.57,80.87,22.6,78.09c7.03-2.78,9.27-13.77,5.01-24.54 C23.35,42.78,14.2,36.3,7.17,39.08L7.17,39.08z M112.55,39.08c7.03,2.78,9.27,13.77,5.01,24.54 c-4.26,10.77-13.42,17.25-20.44,14.47c-7.03-2.78-9.27-13.77-5.01-24.54C96.37,42.78,105.52,36.3,112.55,39.08L112.55,39.08z M79.35,0c9.4,0,17.03,11.69,17.03,26.1s-7.63,26.1-17.03,26.1c-9.4,0-17.03-11.68-17.03-26.1C62.33,11.69,69.95,0,79.35,0L79.35,0 z"
-        />
-      </g>
-    </svg>
-      <span class="font-semibold text-xl text-white tracking-tight"
-        >Paws for a Cause</span
-      >
-    </a>
-    <p
-      class="text-sm text-white sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4"
-    >
-      © 2023 Paws for a Cause
-    </p>
-    <!--
-    <span
-      class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start"
-    >
-      <a class="text-gray-500">
-        <svg
-          fill="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          class="w-5 h-5"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"
-          ></path>
-        </svg>
-      </a>
-      <a class="ml-3 text-gray-500">
-        <svg
-          fill="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          class="w-5 h-5"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"
-          ></path>
-        </svg>
-      </a>
-      <a class="ml-3 text-gray-500">
-        <svg
-          fill="none"
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          class="w-5 h-5"
-          viewBox="0 0 24 24"
-        >
-          <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
-          <path
-            d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"
-          ></path>
-        </svg>
-      </a>
-      <a class="ml-3 text-gray-500">
-        <svg
-          fill="currentColor"
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="0"
-          class="w-5 h-5"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke="none"
-            d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"
-          ></path>
-          <circle cx="4" cy="4" r="2" stroke="none"></circle>
-        </svg>
-      </a>
-    </span> -->
-
-    
-  </div>
-</footer>
-</body>
-</html>
+{% endblock content %}
