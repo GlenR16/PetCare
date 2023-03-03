@@ -1,16 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Login{% endblock title %}
+{% block content %}
 <!-- component -->
-<!doctype html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <title>Donate</title>
-</head>
-<body>
-<!-- <div class="bg-gradient-to-tr from-fuchsia-300 to-sky-500"> -->
-<div class="" 
-style="background: url(imgs/bg.jpg);
+<div class="" style="background: url(imgs/bg.jpg);
 background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)) ,url(https://hornefamilyfoundation.org/wp-content/uploads/2013/11/Animal-Welfare-dogs-sliderdebs-pic-dogs-on-bridge.jpg);">
   <section id="login" class="p-4 flex flex-col justify-center min-h-screen max-w-md mx-auto bg-neutral-800\">
     <div class="p-6 bg-sky-100 rounded">
@@ -46,7 +39,6 @@ background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)) ,url(https:/
   </section>
 
   <!-- NEW DONATION -->
-
   <!-- END NEW DONATION -->
 
   <script>
@@ -81,5 +73,4 @@ background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)) ,url(https:/
 
   </script>
 </div>
-</body>
-</html>
+{% endblock content %}
