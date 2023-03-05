@@ -1,5 +1,6 @@
 const csrfToken = document.querySelector("input[name='csrfmiddlewaretoken']");
 const latestTickets = document.getElementById("latestTickets");
+let domparse = new DOMParser();
 
 function updateStatus(id) {
   const updatedRow = document.getElementById(id);
@@ -37,13 +38,13 @@ function handleAcceptReject(status, id){
     }).then((res)=>res.json())
     .then((data)=>{
         if(!data.submitted) alert("Some error occurred!");
-        
+        document.getElementById(id).remove();
     })
 }
 
 function updateLatestTickets(data) {
   let element = `
-    <div class="flex gap-y-2 gap-x-3">
+    <div class="flex gap-y-2 gap-x-3" id="${data.id}">
             <img width="200px" class="object-cover rounded-md" src="http://127.0.0.1:8000${data.image}" alt="Image">
             <div class="space-y-1">
                 <div class="flex gap-x-2">
@@ -56,21 +57,25 @@ function updateLatestTickets(data) {
                 </div>
                 <div class="text-justify">${data.address}</div>
                 <div class="flex gap-2">
-                    <button class="bg-green-600 hover:bg-green-700 p-1.5 rounded-xl border-none">Accept</button>
-                    <button class="bg-red-600 hover:bg-red-700 p-1.5 rounded-xl border-none">Reject</button>
+                    <button class="bg-green-600 hover:bg-green-700 p-1.5 rounded-xl border-none" onclick='handleAcceptReject("ACCEPT",${data.id});'>Accept</button>
+                    <button class="bg-red-600 hover:bg-red-700 p-1.5 rounded-xl border-none" onclick='handleAcceptReject("REJECT",${data.id});'>Reject</button>
                 </div>
             </div>
         </div>
     `;
+    let result = domparse.parseFromString(element,"text/html").body.querySelector("div");
+    latestTickets.append(result);
 }
 
 async function getLatestTickets() {
   fetch("/api/")
     .then((data) => data.json())
-    .then((data) => data.forEach((ticket) => updateLatestTickets(data)))
+    .then((data) => (
+      data.forEach((ticket)=> {if (!document.getElementById(`${ticket.id}`)) updateLatestTickets(ticket)})))
     .catch((err) => console.log(err));
 }
 
 setInterval(() => {
   getLatestTickets();
-}, 60000);
+}, 6000);
+

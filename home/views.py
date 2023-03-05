@@ -168,12 +168,13 @@ class DashboardView(LoginRequiredMixin,TemplateView):
 def APIView(request):
     offset_lat = 360 * SEARCH_RADIUS / 40075016.686
     offset_long = 360 * SEARCH_RADIUS / 40075017
+    status = request.POST.get("status","")
     up = request.user.latitude + offset_lat
     down = request.user.latitude - offset_lat
     left = request.user.longitude - offset_long
     right = request.user.longitude + offset_long
     valid = Animal.objects.filter(latitude__lte=up,latitude__gte=down,longitude__lte=right,longitude__gte=left,status="Pending")
-    if request.method == "POST":
+    if request.method == "POST" and status == "ACCEPT":
         id = request.POST.get("id",None)
         animal = get_object_or_404(valid,pk=id)
         user = User.objects.get(pk=request.user.id)
