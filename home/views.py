@@ -150,11 +150,11 @@ class DashboardView(LoginRequiredMixin,TemplateView):
         status = request.POST.get("status","")
         if ticket_id != "" and status != "":
             animal = get_object_or_404(Animal,pk=ticket_id)
-            if animal.status == "Allotted" and animal in request.user.ticket:
+            if animal.status == "Allotted" and animal in request.user.tickets.all():
                 animal.status = STATUS[status]
                 animal.save()
-                return self.render_to_response({"submitted":True})
-        return self.render_to_response({"submitted":False})
+                return JsonResponse(data={"submitted":True})
+        return JsonResponse(data={"submitted":False})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
