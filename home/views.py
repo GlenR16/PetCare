@@ -14,7 +14,10 @@ from django.template import Context
 from django.template.loader import get_template
 from django.db.models import Sum
 SEARCH_RADIUS = 5000 # in KM
-
+checkbox = {
+    "on":True,
+    "off":False
+}
 FaviconView = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 
 class IndexView(TemplateView):
@@ -107,7 +110,7 @@ class SignupView(TemplateView):
         verificationfile = request.FILES.get("verificationfile","")
         if name != "" and verificationfile != "" and email != "" and phone != "" and about != "" and password1 != "" and password2 != "" and website != "" and address != "" and city != "" and state != "" and postalcode != "" and alerts != "" and country != "" and newsletter != "" and password1 != "" and password1 == password2:
             address = address +", "+ city +" "+ postalcode+", " + state +", "+ country
-            user = User(name=name,email=email,phone=phone,verification_file=verificationfile,about=about,active_members=activemembers,website=website,address=address,alerts=alerts,newsletters=newsletter)
+            user = User(name=name,email=email,phone=phone,verification_file=verificationfile,about=about,active_members=activemembers,website="https://"+website,address=address,alerts=checkbox[alerts],newsletters=checkbox[newsletter])
             user.set_password(password1)
             user.save()
             login(request,user)

@@ -17,7 +17,7 @@
     {% block root %}
     {% endblock root %}
     <body class="font-mono bg-neutral-800 flex flex-col h-full">
-        <nav class="flex items-center justify-between flex-wrap p-3 mt-0 w-full z-10 top-0 md:bg-neutral-800 bg-neutral-900">
+        <nav class="flex items-center justify-between flex-wrap p-3 mt-0 w-full z-10 top-0 md:bg-neutral-800 bg-neutral-900 sticky">
             <div class="flex items-center flex-shrink-0 text-white mr-4">
                 <div class="h-8 w-14 mr-2">
                     <a href="{% url 'home:index' %}">
@@ -55,7 +55,7 @@
         </nav>
         {% block content %}
         {% endblock content %}
-        <footer class="text-gray-600 body-font bottom-0 clear-both bg-neutral-800">
+        <footer class="text-gray-600 body-font bottom-0 clear-both bg-neutral-800 fixed sm:relative w-full">
             <div class="container px-5 py-3 mx-auto flex items-center sm:flex-row flex-col">
                 <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
                     <div class="h-8 w-14">
