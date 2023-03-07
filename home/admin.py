@@ -14,7 +14,7 @@ class UserAdmin(UserAdmin):
     list_filter = ('is_verified', 'is_active')
     fieldsets = (
         ('User Data', {'fields': ('email', 'name', 'phone','is_verified','verification_file')}),
-        ('NGO Data', {'fields': ('latitude', 'longitude', 'active_members','tickets','address','website','about')}),
+        ('NGO Data', {'fields': ('latitude', 'longitude', 'active_members','tickets','rejected','address','website','about')}),
         ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions','password')}),  
     )
     add_fieldsets = (

@@ -173,16 +173,20 @@ def APIView(request):
     down = request.user.latitude - offset_lat
     left = request.user.longitude - offset_long
     right = request.user.longitude + offset_long
-    valid = Animal.objects.filter(latitude__lte=up,latitude__gte=down,longitude__lte=right,longitude__gte=left,status="Pending")
-    if request.method == "POST" and status == "ACCEPT":
+    valid = Animal.objects.filter(latitude__lte=up,latitude__gte=down,longitude__lte=right,longitude__gte=left,status="Pending").exclude(rejected__id=request.user.id)
+    data = AnimalSerializer(valid,many=True)
+    if request.method == "POST":
         id = request.POST.get("id",None)
         animal = get_object_or_404(valid,pk=id)
         user = User.objects.get(pk=request.user.id)
-        animal.status = STATUS["ALLOTTED"]
-        animal.save()
-        user.tickets.add(animal)
-        return JsonResponse(data={"submitted":True})
-    data = AnimalSerializer(valid,many=True)
+        if status == "ACCEPT":
+            animal.status = STATUS["ALLOTTED"]
+            animal.save()
+            user.tickets.add(animal)
+            return JsonResponse(data={"submitted":True,"data":AnimalSerializer(animal).data})
+        else:
+            user.rejected.add(animal)
+            return JsonResponse(data={"submitted":False})
     return JsonResponse(data=data.data,safe=False)
 
 def send_email(animal):

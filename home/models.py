@@ -21,7 +21,6 @@ PAY_STATUS = {
     "FAILURE":"Failure"
 }
 
-
 def upload_v(instance,filename):
     return "verification/"+str(uuid.uuid4())+"."+filename.split(".")[-1]
 
@@ -34,11 +33,14 @@ class Animal(models.Model):
     longitude = models.FloatField()
     address = models.CharField(max_length=255)
     is_valid = models.BooleanField(default=True)
+    date_reported = models.DateTimeField(auto_now=True)
+    map_url = models.CharField(max_length=255,blank=True,null=True)
     status = models.CharField(max_length=63,default=STATUS["PENDING"])
 
     def save(self, *args, **kwargs):
         if self.address == "":
             self.address = str(geolocator.reverse(str(self.latitude)+","+str(self.longitude)))
+            self.map_url =  "https://maps.google.com/?q="+self.latitude+","+self.longitude
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -54,7 +56,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     latitude = models.FloatField()
     longitude = models.FloatField()
     active_members = models.IntegerField()
-    tickets = models.ManyToManyField(Animal,blank=True)
+    tickets = models.ManyToManyField(Animal,blank=True,related_name="tickets")
+    rejected = models.ManyToManyField(Animal,blank=True,related_name="rejected")
     address = models.CharField(max_length=511)
     website = models.CharField(max_length=255)
     alerts = models.BooleanField(default=False)
