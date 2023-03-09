@@ -10,6 +10,7 @@
         <script defer src="{% static 'js/index.js' %}"></script>
         <link rel="stylesheet" href="{% static 'dist/output.css' %}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+        <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
         {% block css %}
         {% endblock css %}
         <title>{% block title %}{% endblock title %}</title>
@@ -55,6 +56,7 @@
         </nav>
         {% block content %}
         {% endblock content %}
+        <df-messenger intent="WELCOME" chat-title="Paw Hotline" agent-id="b7b3ce0a-da40-4ae9-9823-467e311ac398" language-code="en"></df-messenger>
         <footer class="text-gray-600 body-font bottom-0 clear-both bg-neutral-800 fixed sm:relative w-full">
             <div class="container px-5 py-3 mx-auto flex items-center sm:flex-row flex-col">
                 <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
